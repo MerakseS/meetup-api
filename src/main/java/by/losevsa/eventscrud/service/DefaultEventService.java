@@ -1,6 +1,7 @@
 package by.losevsa.eventscrud.service;
 
 import java.util.List;
+import static java.lang.String.format;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +22,14 @@ public class DefaultEventService implements EventService {
     }
 
     @Override
+    public void create(Event event) {
+        event = eventRepository.save(event);
+        LOG.info(format("Successfully created event with id %d", event.getId()));
+    }
+
+    @Override
     public List<Event> getAll() {
-        LOG.info("Getting all events.");
+        LOG.info("Getting all events");
         return eventRepository.findAll();
     }
 }

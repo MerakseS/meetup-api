@@ -6,6 +6,8 @@ import by.losevsa.eventscrud.entity.Event;
 
 public interface EventService {
 
+    void create(Event event);
+
     List<Event> getAll();
 
 }

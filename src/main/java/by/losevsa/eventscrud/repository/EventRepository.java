@@ -6,5 +6,7 @@ import by.losevsa.eventscrud.entity.Event;
 
 public interface EventRepository {
 
+    Event save(Event event);
+
     List<Event> findAll();
 }
