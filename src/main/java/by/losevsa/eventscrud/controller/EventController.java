@@ -20,8 +20,6 @@ import by.losevsa.eventscrud.service.EventService;
 @RequestMapping("/events")
 public class EventController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(EventController.class);
-
     private final EventService eventService;
 
     public EventController(EventService eventService) {

@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import by.losevsa.eventscrud.entity.Event;
+import by.losevsa.eventscrud.exception.EventNotFoundException;
 import by.losevsa.eventscrud.repository.EventRepository;
-import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class DefaultEventService implements EventService {
@@ -38,7 +38,8 @@ public class DefaultEventService implements EventService {
     public Event get(long id) {
         Event event = eventRepository.findById(id);
         if (event == null) {
-            throw new EntityNotFoundException(format("Event with id %d doesn't exist.", id));
+            LOG.warn(format("Can't get event with id %d", id));
+            throw new EventNotFoundException(format("Event with id %d doesn't exist.", id));
         }
 
         LOG.info(format("Successfully got event with id %d", id));

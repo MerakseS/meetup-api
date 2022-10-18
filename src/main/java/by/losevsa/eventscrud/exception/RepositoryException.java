@@ -1,4 +1,4 @@
-package by.losevsa.eventscrud.repository;
+package by.losevsa.eventscrud.exception;
 
 public class RepositoryException extends RuntimeException {
 

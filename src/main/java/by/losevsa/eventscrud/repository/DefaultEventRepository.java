@@ -8,6 +8,7 @@ import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
 import by.losevsa.eventscrud.entity.Event;
+import by.losevsa.eventscrud.exception.RepositoryException;
 import by.losevsa.eventscrud.util.HibernateUtil;
 
 @Repository
