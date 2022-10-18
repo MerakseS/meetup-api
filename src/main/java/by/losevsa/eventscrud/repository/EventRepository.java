@@ -11,4 +11,9 @@ public interface EventRepository {
     List<Event> findAll();
 
     Event findById(long id);
+
+    Event findReferenceById(long id);
+
+    void merge(Event event);
+
 }

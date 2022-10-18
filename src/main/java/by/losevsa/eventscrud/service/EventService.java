@@ -11,4 +11,7 @@ public interface EventService {
     List<Event> getAll();
 
     Event get(long id);
+
+    void update(long id, Event event);
+
 }

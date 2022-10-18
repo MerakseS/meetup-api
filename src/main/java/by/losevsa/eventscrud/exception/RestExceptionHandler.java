@@ -2,6 +2,8 @@ package by.losevsa.eventscrud.exception;
 
 import static java.lang.String.format;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
+
+    private static final Logger LOG = LoggerFactory.getLogger(RestExceptionHandler.class);
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
@@ -47,6 +51,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<Object> handleAllExceptions(Exception ex) {
+        LOG.error("Unexpected error", ex);
         ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ex);
         return buildResponseEntity(apiError);
     }

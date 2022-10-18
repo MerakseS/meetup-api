@@ -45,4 +45,16 @@ public class DefaultEventService implements EventService {
         LOG.info(format("Successfully got event with id %d", id));
         return event;
     }
+
+    @Override
+    public void update(long id, Event event) {
+        if (eventRepository.findReferenceById(id) == null) {
+            LOG.warn(format("Can't update event with id %d", id));
+            throw new EventNotFoundException(format("Event with id %d doesn't exist.", id));
+        }
+
+        event.setId(id);
+        eventRepository.merge(event);
+        LOG.info(format("Successfully updated event with id %d", id));
+    }
 }

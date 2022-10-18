@@ -14,10 +14,7 @@ import by.losevsa.eventscrud.util.HibernateUtil;
 @Repository
 public class DefaultEventRepository implements EventRepository {
 
-    private static final String EVENT_ID_PARAMETER_NAME = "id";
-
     private static final String GET_ALL_EVENTS_QUERY = "from Event";
-    private static final String GET_EVENT_QUERY = "from Event where id = :id";
 
     @Override
     public Event save(Event event) {
@@ -50,12 +47,37 @@ public class DefaultEventRepository implements EventRepository {
     @Override
     public Event findById(long id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery(GET_EVENT_QUERY, Event.class)
-                .setParameter(EVENT_ID_PARAMETER_NAME, id)
-                .getSingleResultOrNull();
+            return session.get(Event.class, id);
         }
         catch (Exception e) {
             throw new RepositoryException(format("Can't find event with id %d", id), e);
+        }
+    }
+
+    @Override
+    public Event findReferenceById(long id) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.getReference(Event.class, id);
+        }
+        catch (Exception e) {
+            throw new RepositoryException(format("Can't find event with id %d", id), e);
+        }
+    }
+
+    @Override
+    public void merge(Event event) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.merge(event);
+            transaction.commit();
+        }
+        catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+
+            throw new RepositoryException(format("Can't merge event. Event: %s", event), e);
         }
     }
 }

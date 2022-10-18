@@ -2,13 +2,12 @@ package by.losevsa.eventscrud.controller;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +26,7 @@ public class EventController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody Event event) {
+    public ResponseEntity<Object> create(@RequestBody Event event) {
         eventService.create(event);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -40,5 +39,11 @@ public class EventController {
     @GetMapping("/{id}")
     public Event get(@PathVariable long id) {
         return eventService.get(id);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> update(@PathVariable long id, @RequestBody Event event) {
+        eventService.update(id, event);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
