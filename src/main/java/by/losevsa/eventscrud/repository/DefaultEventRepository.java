@@ -55,16 +55,6 @@ public class DefaultEventRepository implements EventRepository {
     }
 
     @Override
-    public Event findReferenceById(long id) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.getReference(Event.class, id);
-        }
-        catch (Exception e) {
-            throw new RepositoryException(format("Can't find event with id %d", id), e);
-        }
-    }
-
-    @Override
     public void merge(Event event) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -78,6 +68,23 @@ public class DefaultEventRepository implements EventRepository {
             }
 
             throw new RepositoryException(format("Can't merge event. Event: %s", event), e);
+        }
+    }
+
+    @Override
+    public void remove(Event event) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.remove(event);
+            transaction.commit();
+        }
+        catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+
+            throw new RepositoryException(format("Can't delete event. Event: %s", event), e);
         }
     }
 }

@@ -12,8 +12,8 @@ public interface EventRepository {
 
     Event findById(long id);
 
-    Event findReferenceById(long id);
-
     void merge(Event event);
+
+    void remove(Event event);
 
 }

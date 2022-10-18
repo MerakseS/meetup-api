@@ -48,7 +48,7 @@ public class DefaultEventService implements EventService {
 
     @Override
     public void update(long id, Event event) {
-        if (eventRepository.findReferenceById(id) == null) {
+        if (eventRepository.findById(id) == null) {
             LOG.warn(format("Can't update event with id %d", id));
             throw new EventNotFoundException(format("Event with id %d doesn't exist.", id));
         }
@@ -56,5 +56,17 @@ public class DefaultEventService implements EventService {
         event.setId(id);
         eventRepository.merge(event);
         LOG.info(format("Successfully updated event with id %d", id));
+    }
+
+    @Override
+    public void delete(long id) {
+        Event event = eventRepository.findById(id);
+        if (event == null) {
+            LOG.warn(format("Can't delete event with id %d", id));
+            throw new EventNotFoundException(format("Event with id %d doesn't exist.", id));
+        }
+
+        eventRepository.remove(event);
+        LOG.info(format("Successfully deleted event with id %d", id));
     }
 }
