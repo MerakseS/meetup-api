@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import by.losevsa.eventscrud.entity.Event;
 import by.losevsa.eventscrud.repository.EventRepository;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class DefaultEventService implements EventService {
@@ -31,5 +32,16 @@ public class DefaultEventService implements EventService {
     public List<Event> getAll() {
         LOG.info("Getting all events");
         return eventRepository.findAll();
+    }
+
+    @Override
+    public Event get(long id) {
+        Event event = eventRepository.findById(id);
+        if (event == null) {
+            throw new EntityNotFoundException(format("Event with id %d doesn't exist.", id));
+        }
+
+        LOG.info(format("Successfully got event with id %d", id));
+        return event;
     }
 }

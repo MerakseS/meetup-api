@@ -13,7 +13,10 @@ import by.losevsa.eventscrud.util.HibernateUtil;
 @Repository
 public class DefaultEventRepository implements EventRepository {
 
+    private static final String EVENT_ID_PARAMETER_NAME = "id";
+
     private static final String GET_ALL_EVENTS_QUERY = "from Event";
+    private static final String GET_EVENT_QUERY = "from Event where id = :id";
 
     @Override
     public Event save(Event event) {
@@ -35,20 +38,23 @@ public class DefaultEventRepository implements EventRepository {
 
     @Override
     public List<Event> findAll() {
-        Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            List<Event> events = session.createQuery(GET_ALL_EVENTS_QUERY, Event.class).getResultList();
-            transaction.commit();
-
-            return events;
+            return session.createQuery(GET_ALL_EVENTS_QUERY, Event.class).getResultList();
         }
         catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-
             throw new RepositoryException("Can't find all events", e);
+        }
+    }
+
+    @Override
+    public Event findById(long id) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(GET_EVENT_QUERY, Event.class)
+                .setParameter(EVENT_ID_PARAMETER_NAME, id)
+                .getSingleResultOrNull();
+        }
+        catch (Exception e) {
+            throw new RepositoryException(format("Can't find event with id %d", id), e);
         }
     }
 }

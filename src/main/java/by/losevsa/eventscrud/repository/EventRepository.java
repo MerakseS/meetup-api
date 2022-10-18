@@ -9,4 +9,6 @@ public interface EventRepository {
     Event save(Event event);
 
     List<Event> findAll();
+
+    Event findById(long id);
 }
