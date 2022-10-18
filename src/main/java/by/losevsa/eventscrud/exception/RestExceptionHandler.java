@@ -14,6 +14,9 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+/**
+ * The type Rest exception handler.
+ */
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -35,6 +38,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(apiError);
     }
 
+    /**
+     * Customize the response for {@link EventNotFoundException}.
+     * @param ex the exception
+     * @return a {@code ResponseEntity} instance with {@link ApiError} body
+     */
     @ExceptionHandler(EventNotFoundException.class)
     protected ResponseEntity<Object> handleEventNotFound(EventNotFoundException ex) {
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND);
@@ -42,6 +50,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(apiError);
     }
 
+    /**
+     * Customize the response for {@link RepositoryException}.
+     * @param ex the exception
+     * @return a {@code ResponseEntity} instance with {@link ApiError} body
+     */
     @ExceptionHandler(RepositoryException.class)
     protected ResponseEntity<Object> handleRepositoryException(RepositoryException ex) {
         String message = "Database error";
@@ -49,6 +62,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(apiError);
     }
 
+    /**
+     * Customize the response for any {@link Exception}.
+     * @param ex the exception
+     * @return a {@code ResponseEntity} instance with {@link ApiError} body
+     */
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<Object> handleAllExceptions(Exception ex) {
         LOG.error("Unexpected error", ex);

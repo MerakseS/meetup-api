@@ -11,6 +11,9 @@ import by.losevsa.eventscrud.entity.Event;
 import by.losevsa.eventscrud.exception.EventNotFoundException;
 import by.losevsa.eventscrud.repository.EventRepository;
 
+/**
+ * The Default implementation of {@link EventService}.
+ */
 @Service
 public class DefaultEventService implements EventService {
 
@@ -18,6 +21,11 @@ public class DefaultEventService implements EventService {
 
     private final EventRepository eventRepository;
 
+    /**
+     * Instantiates a new Default event service.
+     *
+     * @param eventRepository the event repository
+     */
     public DefaultEventService(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
     }

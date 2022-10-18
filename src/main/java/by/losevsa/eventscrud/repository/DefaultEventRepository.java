@@ -11,6 +11,9 @@ import by.losevsa.eventscrud.entity.Event;
 import by.losevsa.eventscrud.exception.RepositoryException;
 import by.losevsa.eventscrud.util.HibernateUtil;
 
+/**
+ * The Default implementation of {@link EventRepository} interface that uses Hibernate.
+ */
 @Repository
 public class DefaultEventRepository implements EventRepository {
 

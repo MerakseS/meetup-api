@@ -8,6 +8,9 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * The util for building hibernate {@link SessionFactory}.
+ */
 public class HibernateUtil {
 
     private static final Logger LOG = LoggerFactory.getLogger(HibernateUtil.class);
@@ -25,6 +28,11 @@ public class HibernateUtil {
         }
     }
 
+    /**
+     * Gets session factory.
+     *
+     * @return the session factory
+     */
     public static SessionFactory getSessionFactory() {
         return SESSION_FACTORY;
     }
