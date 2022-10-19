@@ -23,7 +23,7 @@ public class Meetup {
     @Column(name = "id", nullable = false)
     private long id;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title")
     private String title;
 
     @Column(name = "description")
