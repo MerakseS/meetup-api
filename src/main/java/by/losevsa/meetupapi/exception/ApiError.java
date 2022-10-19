@@ -1,4 +1,4 @@
-package by.losevsa.eventscrud.exception;
+package by.losevsa.meetupapi.exception;
 
 import java.time.LocalDateTime;
 

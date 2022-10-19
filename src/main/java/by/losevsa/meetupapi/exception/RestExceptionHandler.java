@@ -1,4 +1,4 @@
-package by.losevsa.eventscrud.exception;
+package by.losevsa.meetupapi.exception;
 
 import static java.lang.String.format;
 
@@ -39,12 +39,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Customize the response for {@link EventNotFoundException}.
+     * Customize the response for {@link MeetupNotFoundException}.
      * @param ex the exception
      * @return a {@code ResponseEntity} instance with {@link ApiError} body
      */
-    @ExceptionHandler(EventNotFoundException.class)
-    protected ResponseEntity<Object> handleEventNotFound(EventNotFoundException ex) {
+    @ExceptionHandler(MeetupNotFoundException.class)
+    protected ResponseEntity<Object> handleMeetupNotFound(MeetupNotFoundException ex) {
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND);
         apiError.setMessage(ex.getMessage());
         return buildResponseEntity(apiError);

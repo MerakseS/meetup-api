@@ -1,4 +1,4 @@
-package by.losevsa.eventscrud.repository;
+package by.losevsa.meetupapi.repository;
 
 import java.util.List;
 import static java.lang.String.format;
@@ -7,79 +7,62 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
-import by.losevsa.eventscrud.entity.Event;
-import by.losevsa.eventscrud.exception.RepositoryException;
-import by.losevsa.eventscrud.util.HibernateUtil;
+import by.losevsa.meetupapi.entity.Meetup;
+import by.losevsa.meetupapi.exception.RepositoryException;
+import by.losevsa.meetupapi.util.HibernateUtil;
 
 /**
- * The Default implementation of {@link EventRepository} interface that uses Hibernate.
+ * The Default implementation of {@link MeetupRepository} interface that uses Hibernate.
  */
 @Repository
-public class DefaultEventRepository implements EventRepository {
+public class DefaultMeetupRepository implements MeetupRepository {
 
-    private static final String GET_ALL_EVENTS_QUERY = "from Event";
+    private static final String GET_ALL_EVENTS_QUERY = "from Meetup";
 
     @Override
-    public Event save(Event event) {
+    public Meetup save(Meetup meetup) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.persist(event);
+            session.persist(meetup);
             transaction.commit();
-            return event;
+            return meetup;
         }
         catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
 
-            throw new RepositoryException(format("Can't persist event. Event: %s", event), e);
+            throw new RepositoryException(format("Can't persist meetup. Meetup: %s", meetup), e);
         }
     }
 
     @Override
-    public List<Event> findAll() {
+    public List<Meetup> findAll() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery(GET_ALL_EVENTS_QUERY, Event.class).getResultList();
+            return session.createQuery(GET_ALL_EVENTS_QUERY, Meetup.class).getResultList();
         }
         catch (Exception e) {
-            throw new RepositoryException("Can't find all events", e);
+            throw new RepositoryException("Can't find all meetups", e);
         }
     }
 
     @Override
-    public Event findById(long id) {
+    public Meetup findById(long id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.get(Event.class, id);
+            return session.get(Meetup.class, id);
         }
         catch (Exception e) {
-            throw new RepositoryException(format("Can't find event with id %d", id), e);
+            throw new RepositoryException(format("Can't find meetup with id %d", id), e);
         }
     }
 
     @Override
-    public void merge(Event event) {
+    public void merge(Meetup meetup) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.merge(event);
-            transaction.commit();
-        }
-        catch (Exception e) {
-            if (transaction != null && transaction.isActive()) {
-                transaction.rollback();
-            }
-
-            throw new RepositoryException(format("Can't merge event. Event: %s", event), e);
-        }
-    }
-
-    @Override
-    public void remove(Event event) {
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            session.remove(event);
+            session.merge(meetup);
             transaction.commit();
         }
         catch (Exception e) {
@@ -87,7 +70,24 @@ public class DefaultEventRepository implements EventRepository {
                 transaction.rollback();
             }
 
-            throw new RepositoryException(format("Can't delete event. Event: %s", event), e);
+            throw new RepositoryException(format("Can't merge meetup. Meetup: %s", meetup), e);
+        }
+    }
+
+    @Override
+    public void remove(Meetup meetup) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.remove(meetup);
+            transaction.commit();
+        }
+        catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+
+            throw new RepositoryException(format("Can't delete meetup. Meetup: %s", meetup), e);
         }
     }
 }

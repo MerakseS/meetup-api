@@ -1,4 +1,4 @@
-package by.losevsa.eventscrud.util;
+package by.losevsa.meetupapi.util;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;

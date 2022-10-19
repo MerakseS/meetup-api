@@ -1,4 +1,4 @@
-package by.losevsa.eventscrud.entity;
+package by.losevsa.meetupapi.entity;
 
 import java.time.LocalDateTime;
 
@@ -12,11 +12,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 /**
- * The Entity Event.
+ * The Entity Meetup.
  */
 @Entity
-@Table(name = "event")
-public class Event {
+@Table(name = "meetup")
+public class Meetup {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -149,7 +149,7 @@ public class Event {
 
     @Override
     public String toString() {
-        return "Event{" +
+        return "Meetup{" +
             "id=" + id +
             ", title='" + title + '\'' +
             ", description='" + description + '\'' +

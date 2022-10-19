@@ -1,10 +1,10 @@
-package by.losevsa.eventscrud;
+package by.losevsa.meetupapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class EventscrudApplicationTests {
+class MeetupApiApplicationTests {
 
     @Test
     void contextLoads() {
