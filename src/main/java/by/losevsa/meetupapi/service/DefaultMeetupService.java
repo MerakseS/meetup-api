@@ -1,7 +1,6 @@
 package by.losevsa.meetupapi.service;
 
 import java.util.List;
-import static java.lang.String.format;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +32,7 @@ public class DefaultMeetupService implements MeetupService {
     @Override
     public void create(Meetup meetup) {
         meetup = meetupRepository.save(meetup);
-        LOG.info(format("Successfully created meetup with id %d", meetup.getId()));
+        LOG.info("Successfully created meetup with id {}", meetup.getId());
     }
 
     @Override
@@ -46,35 +45,35 @@ public class DefaultMeetupService implements MeetupService {
     public Meetup get(long id) {
         Meetup meetup = meetupRepository.findById(id);
         if (meetup == null) {
-            LOG.warn(format("Can't get meetup with id %d", id));
-            throw new MeetupNotFoundException(format("Meetup with id %d doesn't exist.", id));
+            LOG.warn("Can't get meetup with id {}", id);
+            throw new MeetupNotFoundException(id);
         }
 
-        LOG.info(format("Successfully got meetup with id %d", id));
+        LOG.info("Successfully got meetup with id {}", id);
         return meetup;
     }
 
     @Override
     public void update(long id, Meetup meetup) {
         if (meetupRepository.findById(id) == null) {
-            LOG.warn(format("Can't update meetup with id %d", id));
-            throw new MeetupNotFoundException(format("Meetup with id %d doesn't exist.", id));
+            LOG.warn("Can't update meetup with id {}", id);
+            throw new MeetupNotFoundException(id);
         }
 
         meetup.setId(id);
         meetupRepository.merge(meetup);
-        LOG.info(format("Successfully updated meetup with id %d", id));
+        LOG.info("Successfully updated meetup with id {}", id);
     }
 
     @Override
     public void delete(long id) {
         Meetup meetup = meetupRepository.findById(id);
         if (meetup == null) {
-            LOG.warn(format("Can't delete meetup with id %d", id));
-            throw new MeetupNotFoundException(format("Meetup with id %d doesn't exist.", id));
+            LOG.warn("Can't delete meetup with id {}", id);
+            throw new MeetupNotFoundException(id);
         }
 
         meetupRepository.remove(meetup);
-        LOG.info(format("Successfully deleted meetup with id %d", id));
+        LOG.info("Successfully deleted meetup with id {}", id);
     }
 }
