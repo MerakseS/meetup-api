@@ -2,6 +2,7 @@ package by.losevsa.meetupapi.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import by.losevsa.meetupapi.dto.MeetupRequestDto;
+import by.losevsa.meetupapi.dto.MeetupResponseDto;
 import by.losevsa.meetupapi.entity.Meetup;
+import by.losevsa.meetupapi.mapper.MeetupMapper;
 import by.losevsa.meetupapi.service.MeetupService;
 
 /**
@@ -23,27 +27,32 @@ import by.losevsa.meetupapi.service.MeetupService;
 @RequestMapping("/meetups")
 public class MeetupController {
 
+    private final MeetupMapper meetupMapper;
     private final MeetupService meetupService;
 
     /**
      * Instantiates a new Meetup controller.
      *
+     * @param meetupMapper model mapper for Meetup
      * @param meetupService the meetup service
      */
-    public MeetupController(MeetupService meetupService) {
+    @Autowired
+    public MeetupController(MeetupMapper meetupMapper, MeetupService meetupService) {
+        this.meetupMapper = meetupMapper;
         this.meetupService = meetupService;
     }
 
     /**
      * Endpoint to create new Meetup.
      *
-     * @param meetup the meetup to create
-     * @return ResponseEntity with HttpStatus.CREATED if meetup was created successfully
+     * @param meetupRequestDto the meetup request DTO with data to create meetup
+     * @return ResponseEntity with Created HTTP status, if meetup was created successfully
      */
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody Meetup meetup) {
+    public ResponseEntity<Object> create(@RequestBody MeetupRequestDto meetupRequestDto) {
+        Meetup meetup = meetupMapper.mapRequestDtoToMeetup(meetupRequestDto);
         meetupService.create(meetup);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     /**
@@ -52,8 +61,10 @@ public class MeetupController {
      * @return the {@link List} of {@link Meetup}s
      */
     @GetMapping
-    public List<Meetup> getAll() {
-        return meetupService.getAll();
+    public ResponseEntity<List<MeetupResponseDto>> getAll() {
+        List<Meetup> meetupList = meetupService.getAll();
+        List<MeetupResponseDto> meetupResponseDtoList = meetupMapper.mapMeetupListToResponseDto(meetupList);
+        return ResponseEntity.ok(meetupResponseDtoList);
     }
 
     /**
@@ -63,32 +74,36 @@ public class MeetupController {
      * @return the meetup by id
      */
     @GetMapping("/{id}")
-    public Meetup get(@PathVariable long id) {
-        return meetupService.get(id);
+    public ResponseEntity<MeetupResponseDto> get(@PathVariable long id) {
+        Meetup meetup = meetupService.get(id);
+        MeetupResponseDto meetupResponseDto = meetupMapper.mapMeetupToResponseDto(meetup);
+        return ResponseEntity.ok(meetupResponseDto);
     }
 
     /**
      * Endpoint to update meetup by id.
      *
      * @param id the id of the Meetup
-     * @param meetup new meetup to update
-     * @return ResponseEntity with HttpStatus.OK if meetup was updated successfully
+     * @param meetupRequestDto the meetup request DTO with data to update meetup
+     * @return ResponseEntity with Ok Http status if meetup was updated successfully
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable long id, @RequestBody Meetup meetup) {
+    public ResponseEntity<Object> update(@PathVariable long id,
+        @RequestBody MeetupRequestDto meetupRequestDto) {
+        Meetup meetup = meetupMapper.mapRequestDtoToMeetup(meetupRequestDto);
         meetupService.update(id, meetup);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     /**
      * Endpoint to delete meetup by id.
      *
      * @param id the id of the Meetup
-     * @return ResponseEntity with HttpStatus.OK if meetup was deleted successfully
+     * @return ResponseEntity with Ok Http status if meetup was deleted successfully
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable long id) {
         meetupService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 }
