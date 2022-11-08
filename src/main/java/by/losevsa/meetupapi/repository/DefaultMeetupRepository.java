@@ -19,10 +19,16 @@ public class DefaultMeetupRepository implements MeetupRepository {
 
     private static final String GET_ALL_EVENTS_QUERY = "from Meetup";
 
+    private final HibernateUtil hibernateUtil;
+
+    public DefaultMeetupRepository(HibernateUtil hibernateUtil) {
+        this.hibernateUtil = hibernateUtil;
+    }
+
     @Override
     public Meetup save(Meetup meetup) {
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = hibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             session.persist(meetup);
             transaction.commit();
@@ -39,7 +45,7 @@ public class DefaultMeetupRepository implements MeetupRepository {
 
     @Override
     public List<Meetup> findAll() {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = hibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery(GET_ALL_EVENTS_QUERY, Meetup.class).getResultList();
         }
         catch (Exception e) {
@@ -49,7 +55,7 @@ public class DefaultMeetupRepository implements MeetupRepository {
 
     @Override
     public Meetup findById(long id) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = hibernateUtil.getSessionFactory().openSession()) {
             return session.get(Meetup.class, id);
         }
         catch (Exception e) {
@@ -60,7 +66,7 @@ public class DefaultMeetupRepository implements MeetupRepository {
     @Override
     public void merge(Meetup meetup) {
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = hibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             session.merge(meetup);
             transaction.commit();
@@ -77,7 +83,7 @@ public class DefaultMeetupRepository implements MeetupRepository {
     @Override
     public void remove(Meetup meetup) {
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = hibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             session.remove(meetup);
             transaction.commit();
